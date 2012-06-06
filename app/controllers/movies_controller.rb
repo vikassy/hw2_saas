@@ -7,7 +7,31 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    @all_ratings = ["G", "PG" , "PG-13" , "R"] 
+    @select = []
+    params["remember"] = []
+    @val = params[:ratings]
+    if !params[:ratings].nil?
+      params[:ratings].each do |key , value|
+        @select << key
+        params["#{key}"]=true
+      end
+    end
+    
+    @movie = Movie.where(rating: @select)
+    if !@movie.empty?
+      @movies = @movie.order(params[:sort])
+    else
+      @movies = Movie.order(params[:sort])
+    end 
+    if params[:sort] == "title"
+      @class_t = "hilite"      
+    elsif params[:sort] == "release_date"
+      @class_r = "hilite"      
+    else 
+      @class_t = ""
+      @class_r = ""
+    end
   end
 
   def new
