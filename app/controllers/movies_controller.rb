@@ -1,5 +1,5 @@
 class MoviesController < ApplicationController
-
+include MoviesHelper
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
@@ -7,6 +7,7 @@ class MoviesController < ApplicationController
   end
 
   def index
+    store_url
     @all_ratings = ["G", "PG" , "PG-13" , "R"] 
     @select = []
     params["remember"] = []
